@@ -1,0 +1,4 @@
+Hello world 22222
+target remote | qemu-system-x86_64 -hda ./bin/boot_protected_mode.bin -S -gdb stdio
+add-symbol-file ./build/kernel_full.o 0x0100000
+target remote | qemu-system-x86_64 -hda ./bin/os.bin -S -gdb stdio
