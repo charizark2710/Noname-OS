@@ -1,0 +1,2 @@
+Hello world 22222
+target remote | qemu-system-x86_64 -hda ./bin/boot_protected_mode.bin -S -gdb stdio
