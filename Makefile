@@ -2,7 +2,9 @@
 # 	nasm -f bin ./boot.asm -o ./boot.bin
 # 	dd if=./message.txt >> ./boot.bin
 # 	dd if=/dev/zero bs=512 count=1 >> ./boot.bin
-FILES = ./build/kernel.asm.o
+FILES = ./build/kernel.asm.o ./build/kernel.o
+INCLUDES = -I ./src/include
+FLAGS = -g -ffreestanding -falign-jumps -falign-functions -falign-labels -falign-loops -fstrength-reduce -fomit-frame-pointer -finline-functions -Wno-unused-function -fno-builtin -Werror -Wno-unused-label -Wno-cpp -Wno-unused-parameter -nostdlib -nostartfiles -nodefaultlibs -Wall -O0 -Iinc
 
 all_protected: build_protected ./bin/kernel.bin
 	rm -rf ./bin/os.bin
@@ -12,7 +14,7 @@ all_protected: build_protected ./bin/kernel.bin
 
 ./bin/kernel.bin: $(FILES)
 	i686-elf-ld -g -relocatable $(FILES) -o ./build/kernel_full.o
-	i686-elf-gcc -T ./src/linker.ld -o ./bin/kernel.bin -ffreestanding -O0 -nostdlib ./build/kernel_full.o
+	i686-elf-gcc $(FLAGS) -T ./src/linker.ld -o ./bin/kernel.bin ./build/kernel_full.o
 
 build_protected: ./src/boot/boot_protected_mode.asm
 	mkdir -p ./bin
@@ -20,6 +22,9 @@ build_protected: ./src/boot/boot_protected_mode.asm
 
 ./build/kernel.asm.o: ./src/kernel.asm
 	nasm -f elf -g ./src/kernel.asm -o ./build/kernel.asm.o
+
+./build/kernel.o: ./src/kernel/kernel.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/kernel/kernel.c -o ./build/kernel.o
 
 build_real:
 	mkdir -p ./bin
