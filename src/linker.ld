@@ -26,6 +26,6 @@ SECTIONS
 
     .asm : ALIGN(4096)
     {
-        *(*.asm)
+        *(.asm)
     }
 }
