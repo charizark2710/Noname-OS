@@ -9,7 +9,7 @@
 # 	dd if=./message.txt >> ./bin/boot_real_mode.bin
 # 	dd if=/dev/zero bs=512 count=1 >> ./bin/boot_real_mode.bin
 
-FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt.asm.o ./build/idt.o ./build/memory.o
+FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt.asm.o ./build/idt.o ./build/memory.o ./build/io.asm.o
 INCLUDES = -I ./src/include
 FLAGS = -g -ffreestanding -falign-jumps -falign-functions -falign-labels -falign-loops -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdlib -nostartfiles -nodefaultlibs -Wall -O0 -Iinc
 
@@ -32,14 +32,17 @@ build_protected: ./src/boot/boot_protected_mode.asm
 ./build/kernel.o: ./src/kernel.c
 	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/kernel.c -o ./build/kernel.o
 
-./build/idt.asm.o: ./src/idt.asm
-	nasm -f elf -g ./src/idt.asm -o ./build/idt.asm.o
+./build/idt.asm.o: ./src/idt/idt.asm
+	nasm -f elf -g ./src/idt/idt.asm -o ./build/idt.asm.o
 
-./build/idt.o: ./src/idt.c
-	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/idt.c -o ./build/idt.o
+./build/idt.o: ./src/idt/idt.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/idt/idt.c -o ./build/idt.o
 
-./build/memory.o: ./src/memory.c
-	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/memory.c -o ./build/memory.o
+./build/memory.o: ./src/memory/memory.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/memory/memory.c -o ./build/memory.o
+
+./build/io.asm.o: ./src/io/io.asm
+	nasm -f elf -g ./src/io/io.asm -o ./build/io.asm.o
 
 clean:
 	rm -rf ./bin/*

@@ -1,7 +1,7 @@
-#include "include/idt.h"
-#include "config.h"
-#include "include/kernel.h"
-#include "include/memory.h"
+#include "../include/idt.h"
+#include "../config.h"
+#include "../include/kernel.h"
+#include "../include/memory.h"
 
 struct idt_desc idt_descriptors[PEACHOS_TOTAL_INTERRUPTS];
 struct idtr_desc idtr_descriptor;

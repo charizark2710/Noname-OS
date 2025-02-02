@@ -1,5 +1,6 @@
 #include "include/kernel.h"
 #include "include/idt.h"
+#include "include/io.h"
 #include <stdint.h>
 
 uint16_t col;
@@ -88,6 +89,7 @@ void kernel_main()
   char c[] = "Hello, World!";
   print(c);
   idt_init();
+  outb(0x3f8, 0x41);
   // print((char *)res);
 }
 
