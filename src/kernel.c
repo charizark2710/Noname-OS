@@ -86,10 +86,9 @@ void write(char c, uint16_t color)
 void kernel_main()
 {
   terminal_init();
-  char c[] = "Hello, World!";
+  char c[] = "Hello, World! \n";
   print(c);
   idt_init();
-  outb(0x3f8, 0x41);
   // print((char *)res);
 }
 

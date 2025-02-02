@@ -28,7 +28,11 @@ struct idtr_desc
     uint32_t base;  // Base address of the start of the interrupt descriptor table
 } __attribute__((packed));
 
-extern void idt_load(struct idtr_desc *ptr);
 void idt_init();
+void int21_handler();
+
+extern void idt_load(struct idtr_desc *ptr);
+extern void int21h();
+extern void no_int();
 
 #endif
