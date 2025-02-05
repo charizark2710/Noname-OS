@@ -1,0 +1,20 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Launch QEMU",
+            "type": "shell",
+            "linux": {
+                "command": "qemu-system-x86_64 -hda bin/os.bin -S -gdb tcp::1234 -daemonize"
+            },
+            "dependsOn": ["build"]
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "linux": {
+                "command": "./build.sh"
+            }
+        }
+    ]
+}
