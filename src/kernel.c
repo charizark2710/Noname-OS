@@ -88,11 +88,12 @@ void kernel_main()
   idt_init();
   kheap_init();
 
-  void *ptr = kmalloc(50);
-  void *ptr2 = kmalloc(50000);
+  enable_int();
+  // void *ptr = kmalloc(50);
+  // void *ptr2 = kmalloc(50000);
 
-  kfree(ptr2);
-  void *ptr3 = kmalloc(9000);
+  // kfree(ptr2);
+  // void *ptr3 = kmalloc(9000);
 }
 
 void print(char *c)

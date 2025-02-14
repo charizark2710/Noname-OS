@@ -34,5 +34,8 @@ void int21_handler();
 extern void idt_load(struct idtr_desc *ptr);
 extern void int21h();
 extern void no_int();
+extern void enable_int();
+extern void disable_int();
+
 
 #endif
