@@ -5,7 +5,7 @@
             "label": "Launch QEMU",
             "type": "shell",
             "linux": {
-                "command": "qemu-system-x86_64 -hda bin/os.bin -S -gdb tcp::1234 -daemonize"
+                "command": "qemu-system-i386 -hda bin/os.bin -S -gdb tcp::1234 -daemonize"
             },
             "dependsOn": ["build"]
         },

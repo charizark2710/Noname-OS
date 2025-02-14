@@ -1,6 +1,5 @@
 #include "include/kernel.h"
 #include "include/idt.h"
-#include "include/io.h"
 #include <stdint.h>
 
 uint16_t col;
@@ -29,7 +28,6 @@ void terminal_put_char(int x, int y, char c, char color)
   vid_mem[y * VGA_WIDTH + x] = terminal_make_char(c, color);
 }
 
-
 void print_char(int x, int y, const char *str, char color)
 {
   size_t len = strlen(str);
@@ -52,7 +50,6 @@ void terminal_init()
     }
   }
 }
-
 
 void write(char c, uint16_t color)
 {
@@ -89,7 +86,13 @@ void kernel_main()
   char c[] = "Hello, World! \n";
   print(c);
   idt_init();
-  // print((char *)res);
+  kheap_init();
+
+  void *ptr = kmalloc(50);
+  void *ptr2 = kmalloc(50000);
+
+  kfree(ptr2);
+  void *ptr3 = kmalloc(9000);
 }
 
 void print(char *c)

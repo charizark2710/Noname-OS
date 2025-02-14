@@ -5,6 +5,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "kheap.h"
 
 void kernel_main();
 void print_char(int x, int y, const char *str, char color);
