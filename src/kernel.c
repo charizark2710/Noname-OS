@@ -1,6 +1,4 @@
 #include "include/kernel.h"
-#include "include/idt.h"
-#include <stdint.h>
 
 uint16_t col;
 uint16_t row;
@@ -80,15 +78,22 @@ void write(char c, uint16_t color)
   }
 }
 
+struct page_4gb_chunk *chunk = 0;
 void kernel_main()
 {
   terminal_init();
-  char c[] = "Hello, World! \n";
-  print(c);
   idt_init();
   kheap_init();
 
+  chunk = new_4gb_page(PAGE_WRITABLE | PAGE_PRESENT | PAGE_USER_MODE);
+
+  switch_page(get_directory(chunk));
+
+  enable_paging();
   enable_int();
+
+  char c[] = "Kernel load successfully! \n";
+  print(c);
   // void *ptr = kmalloc(50);
   // void *ptr2 = kmalloc(50000);
 
