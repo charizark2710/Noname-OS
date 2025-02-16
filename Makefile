@@ -9,7 +9,7 @@
 # 	dd if=./message.txt >> ./bin/boot_real_mode.bin
 # 	dd if=/dev/zero bs=512 count=1 >> ./bin/boot_real_mode.bin
 
-FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt.asm.o ./build/idt.o ./build/memory.o ./build/io.asm.o ./build/heap.o ./build/kheap.o
+FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt.asm.o ./build/idt.o ./build/memory.o ./build/io.asm.o ./build/heap.o ./build/kheap.o ./build/page.o ./build/page.asm.o
 INCLUDES = -I ./src/include
 FLAGS = -g -ffreestanding -falign-jumps -falign-functions -falign-labels -falign-loops -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdlib -nostartfiles -nodefaultlibs -Wall -O0 -Iinc
 
@@ -41,14 +41,20 @@ build_protected: ./src/boot/boot_protected_mode.asm
 ./build/memory.o: ./src/memory/memory.c
 	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/memory/memory.c -o ./build/memory.o
 
-./build/heap.o: ./src/memory/heap.c
-	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/memory/heap.c -o ./build/heap.o
+./build/heap.o: ./src/memory/heap/heap.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/memory/heap/heap.c -o ./build/heap.o
 
-./build/kheap.o: ./src/memory/kheap.c
-	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/memory/kheap.c -o ./build/kheap.o
+./build/kheap.o: ./src/memory/heap/kheap.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/memory/heap/kheap.c -o ./build/kheap.o
 
 ./build/io.asm.o: ./src/io/io.asm
 	nasm -f elf -g ./src/io/io.asm -o ./build/io.asm.o
+
+./build/page.asm.o: ./src/memory/page/page.asm
+	nasm -f elf -g ./src/memory/page/page.asm -o ./build/page.asm.o
+
+./build/page.o: ./src/memory/page/page.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/memory/page/page.c -o ./build/page.o
 
 clean:
 	rm -rf ./bin/*

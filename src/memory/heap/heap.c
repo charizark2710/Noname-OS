@@ -1,4 +1,4 @@
-#include "../include/heap.h"
+#include "../../include/heap.h"
 
 static int heap_validate_alignment(void *ptr)
 {

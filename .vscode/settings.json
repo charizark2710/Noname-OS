@@ -23,6 +23,7 @@
         "text_encoding": "c",
         "io.h": "c",
         "stdint.h": "c",
-        "random": "c"
+        "random": "c",
+        "page.h": "c"
     }
 }

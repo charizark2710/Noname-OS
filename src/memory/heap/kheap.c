@@ -1,5 +1,5 @@
-#include "../include/kheap.h"
-#include "../include/kernel.h"
+#include "../../include/kheap.h"
+#include "../../include/kernel.h"
 
 struct heap *kheap;
 struct heap_table *kheap_table;
