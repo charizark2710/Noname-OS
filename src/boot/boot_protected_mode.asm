@@ -166,12 +166,14 @@ gdt_descriptor:
     dd gdt_start
 
 [BITS 32]
+KERNEL_ADDR equ 0x0100000
+
 load32:
     mov eax, 1
     mov ecx, 100
-    mov edi, 0x0100000
+    mov edi, KERNEL_ADDR
     call ata_lba_read
-    jmp CODE_SEG:0x0100000
+    jmp CODE_SEG:KERNEL_ADDR
 
 ata_lba_read:
     mov ebx, eax ; Backup the LBA
@@ -212,7 +214,7 @@ ata_lba_read:
     mov al, 0x20
     out dx, al
 
-    ; Read all sectors into memory
+; Read all sectors into memory
 .next_sector:
     push ecx
 
@@ -223,7 +225,7 @@ ata_lba_read:
     test al, 8
     jz .try_again
 
-; We need to read 256 words at a time
+    ; We need to read 256 words at a time
     mov ecx, 256
     mov dx, 0x1F0
     rep insw

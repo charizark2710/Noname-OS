@@ -8,6 +8,7 @@
 #include "kheap.h"
 #include "page.h"
 #include "idt.h"
+#include "disk.h"
 
 
 void kernel_main();

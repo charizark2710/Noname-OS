@@ -65,4 +65,5 @@ uint32_t memory_map(uint32_t *physical_addr, void *virtual_address, uint32_t val
     size_t directory = physical_addr[directory_index];
     size_t *table = (size_t *)(directory & 0xfffff000);
     table[entry_index] = val;
+    return 0;
 }

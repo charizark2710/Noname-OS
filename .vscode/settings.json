@@ -24,6 +24,7 @@
         "io.h": "c",
         "stdint.h": "c",
         "random": "c",
-        "page.h": "c"
+        "page.h": "c",
+        "disk.h": "c"
     }
 }

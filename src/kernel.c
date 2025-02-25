@@ -1,4 +1,5 @@
 #include "include/kernel.h"
+#include "include/disk.h"
 
 uint16_t col;
 uint16_t row;
@@ -98,7 +99,7 @@ void kernel_main()
   // void *ptr3 = kmalloc(9000);
 
   void *ptr = kmalloc(4096);
-  
+
   enable_paging();
 
   char *str = (char *)0x1000;
@@ -109,10 +110,14 @@ void kernel_main()
   str[3] = 't';
   str[4] = '\n';
 
-
   print(str);
 
   print(ptr);
+
+  char buf[512];
+
+  search_and_init();
+  read_from_disk(get_disk(0), 0, 1, buf);
 
   enable_int();
 }

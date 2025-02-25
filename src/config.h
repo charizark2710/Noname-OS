@@ -10,4 +10,5 @@
 #define HEAP_ADDRESS 0x00007E00
 #define HEAP_START 0x01000000
 
+#define SECTOR_SIZE 512
 #endif
