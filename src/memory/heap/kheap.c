@@ -51,12 +51,17 @@ void mark_block_taken(struct heap *heap, int start_block, int needed_blocks)
 
 void mark_block_free(struct heap *heap, int start_block)
 {
+    size_t size = 0;
+    int temp = start_block;
     HEAP_BLOCK_TABLE_ENTRY *entry = heap->table.entries;
     do
     {
+        size += HEAP_BLOCK_SIZE;
         entry[start_block] = HEAP_BLOCK_TABLE_ENTRY_FREE;
         start_block++;
     } while ((entry[start_block] & 0x0f) != HEAP_BLOCK_TABLE_ENTRY_FREE && (entry[start_block] & 0x40) != HEAP_BLOCK_IS_FIRST);
+    size_t saddr = (size_t)kheap->start + (temp * HEAP_BLOCK_SIZE);
+    memset((void *)saddr, 0, size);
 }
 
 void *kmalloc(size_t size)
@@ -87,7 +92,6 @@ void *kmalloc(size_t size)
         {
             mark_block_taken(kheap, start_block, total_needed_blocks);
             size_t saddr = (size_t)kheap->start + (start_block * HEAP_BLOCK_SIZE);
-
             return (void *)saddr;
         }
     }
@@ -100,6 +104,10 @@ void *kmalloc(size_t size)
 
 void kfree(void *ptr)
 {
+    if (ptr == 0)
+    {
+        return;
+    }
     int start_block = ((int)(ptr - kheap->start)) / HEAP_BLOCK_SIZE;
     mark_block_free(kheap, start_block);
     return;

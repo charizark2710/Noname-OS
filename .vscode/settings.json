@@ -25,6 +25,12 @@
         "stdint.h": "c",
         "random": "c",
         "page.h": "c",
-        "disk.h": "c"
+        "disk.h": "c",
+        "cstdlib": "c",
+        "string.h": "c",
+        "path_parser.h": "c",
+        "status.h": "c",
+        "stddef.h": "c",
+        "typeinfo": "c"
     }
 }

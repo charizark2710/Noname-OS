@@ -9,7 +9,7 @@
 # 	dd if=./message.txt >> ./bin/boot_real_mode.bin
 # 	dd if=/dev/zero bs=512 count=1 >> ./bin/boot_real_mode.bin
 
-FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt.asm.o ./build/idt.o ./build/memory.o ./build/io.asm.o ./build/heap.o ./build/kheap.o ./build/page.o ./build/page.asm.o ./build/disk.o
+FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt.asm.o ./build/idt.o ./build/memory.o ./build/io.asm.o ./build/heap.o ./build/kheap.o ./build/page.o ./build/page.asm.o ./build/disk.o ./build/path_parser.o ./build/string.o
 INCLUDES = -I ./src/include
 FLAGS = -g -ffreestanding -falign-jumps -falign-functions -falign-labels -falign-loops -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdlib -nostartfiles -nodefaultlibs -Wall -O0 -Iinc
 
@@ -58,6 +58,12 @@ build_protected: ./src/boot/boot_protected_mode.asm
 
 ./build/disk.o: ./src/disk/disk.c
 	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/disk/disk.c -o ./build/disk.o
+
+./build/path_parser.o: ./src/fs/path_parser.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/fs/path_parser.c -o ./build/path_parser.o
+
+./build/string.o: ./src/string/string.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/string/string.c -o ./build/string.o
 
 clean:
 	rm -rf ./bin/*
