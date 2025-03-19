@@ -9,13 +9,13 @@
 #include "page.h"
 #include "idt.h"
 #include "disk.h"
-
+#include "string.h"
+#include "path_parser.h"
 
 void kernel_main();
 void print_char(int x, int y, const char *str, char color);
 void write(char c, uint16_t color);
 void terminal_init();
-size_t strlen(const char *str);
 void terminal_put_char(int x, int y, char c, char color);
 uint16_t terminal_make_char(char c, char color);
 void print(char *c);

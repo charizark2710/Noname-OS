@@ -5,16 +5,6 @@ uint16_t col;
 uint16_t row;
 uint16_t *vid_mem;
 
-size_t strlen(const char *str)
-{
-  size_t len = 0;
-  while (str[len])
-  {
-    len++;
-  }
-  return len;
-}
-
 uint16_t terminal_make_char(char c, char color)
 {
   // The VGA text buffer is 16 bits wide, with the first 8 bits being the color
@@ -102,7 +92,7 @@ void kernel_main()
 
   enable_paging();
 
-  char *str = (char *)0x1000;
+  char *str = (char *)0x3000;
   memory_map(get_directory(chunk), str, (size_t)ptr | PAGE_PRESENT | PAGE_WRITABLE);
   str[0] = 'T';
   str[1] = 'e';
@@ -114,11 +104,12 @@ void kernel_main()
 
   print(ptr);
 
-  char buf[512];
+  // char buf[512];
 
-  search_and_init();
-  read_from_disk(get_disk(0), 0, 1, buf);
+  // search_and_init();
+  // read_from_disk(get_disk(0), 0, 1, buf);
 
+  struct path_root * p = path_parser("/home/root/os.bin");
   enable_int();
 }
 

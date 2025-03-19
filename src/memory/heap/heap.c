@@ -14,6 +14,7 @@ static int heap_validate_table(struct heap *heap, struct heap_table *table)
     {
         return VALIDATE_TOTAL_BLOCKS_ERROR;
     }
+    return 0;
 }
 
 void calculate_table_size(struct heap_table *table)
