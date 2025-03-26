@@ -1,5 +1,6 @@
 #include "include/kernel.h"
 #include "include/disk.h"
+#include "include/streamer.h"
 
 uint16_t col;
 uint16_t row;
@@ -73,8 +74,9 @@ struct page_4gb_chunk *chunk = 0;
 void kernel_main()
 {
   terminal_init();
-  idt_init();
+  search_and_init();
   kheap_init();
+  idt_init();
 
   chunk = new_4gb_page(PAGE_WRITABLE | PAGE_PRESENT | PAGE_USER_MODE);
 
@@ -111,6 +113,12 @@ void kernel_main()
 
   struct path_root * p = path_parser("/home/root/os.bin");
   enable_int();
+
+  struct disk_streamer *streamer = new_streamer(0);
+
+  seek_streamer(streamer, 0x201);
+  unsigned char ch = 0;
+  read_streamer(streamer, &ch, 1);
 }
 
 void print(char *c)

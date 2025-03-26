@@ -11,6 +11,7 @@
 #include "disk.h"
 #include "string.h"
 #include "path_parser.h"
+#include "streamer.h"
 
 void kernel_main();
 void print_char(int x, int y, const char *str, char color);

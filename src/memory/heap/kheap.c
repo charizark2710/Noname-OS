@@ -1,16 +1,16 @@
 #include "../../include/kheap.h"
 #include "../../include/kernel.h"
 
-struct heap *kheap;
-struct heap_table *kheap_table;
+struct heap kheap;
+struct heap_table kheap_table;
 
 void kheap_init()
 {
-    kheap_table->entries = (HEAP_BLOCK_TABLE_ENTRY *)HEAP_ADDRESS;
+    kheap_table.entries = (HEAP_BLOCK_TABLE_ENTRY *)HEAP_ADDRESS;
     // init how many entries (blocks) we can have in the table
-    kheap_table->total = HEAP_SIZE_TOTAL / HEAP_BLOCK_SIZE;
-    kheap->start = (void *)HEAP_START;
-    int res = heap_create(kheap, kheap_table);
+    kheap_table.total = HEAP_SIZE_TOTAL / HEAP_BLOCK_SIZE;
+    kheap.start = (void *)HEAP_START;
+    int res = heap_create(&kheap, &kheap_table);
     if (res < 0)
     {
         print("Failed to create heap\n");
@@ -60,7 +60,7 @@ void mark_block_free(struct heap *heap, int start_block)
         entry[start_block] = HEAP_BLOCK_TABLE_ENTRY_FREE;
         start_block++;
     } while ((entry[start_block] & 0x0f) != HEAP_BLOCK_TABLE_ENTRY_FREE && (entry[start_block] & 0x40) != HEAP_BLOCK_IS_FIRST);
-    size_t saddr = (size_t)kheap->start + (temp * HEAP_BLOCK_SIZE);
+    size_t saddr = (size_t)kheap.start + (temp * HEAP_BLOCK_SIZE);
     memset((void *)saddr, 0, size);
 }
 
@@ -72,12 +72,12 @@ void *kmalloc(size_t size)
         return 0;
     }
     uint32_t total_needed_blocks = aligned_size / HEAP_BLOCK_SIZE;
-    int total_table_entries = kheap->table.total;
+    int total_table_entries = kheap.table.total;
     int free_blocks = 0;
     int start_block = -1;
     for (size_t i = 0; i < total_table_entries; i++)
     {
-        if ((kheap->table.entries[i] & 0x0f) != HEAP_BLOCK_TABLE_ENTRY_FREE)
+        if ((kheap.table.entries[i] & 0x0f) != HEAP_BLOCK_TABLE_ENTRY_FREE)
         {
             free_blocks = 0;
             start_block = -1;
@@ -90,8 +90,8 @@ void *kmalloc(size_t size)
         free_blocks++;
         if (free_blocks == total_needed_blocks)
         {
-            mark_block_taken(kheap, start_block, total_needed_blocks);
-            size_t saddr = (size_t)kheap->start + (start_block * HEAP_BLOCK_SIZE);
+            mark_block_taken(&kheap, start_block, total_needed_blocks);
+            size_t saddr = (size_t)kheap.start + (start_block * HEAP_BLOCK_SIZE);
             return (void *)saddr;
         }
     }
@@ -108,7 +108,7 @@ void kfree(void *ptr)
     {
         return;
     }
-    int start_block = ((int)(ptr - kheap->start)) / HEAP_BLOCK_SIZE;
-    mark_block_free(kheap, start_block);
+    int start_block = ((int)(ptr - kheap.start)) / HEAP_BLOCK_SIZE;
+    mark_block_free(&kheap, start_block);
     return;
 }

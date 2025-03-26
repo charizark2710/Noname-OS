@@ -1,6 +1,6 @@
 #include "../include/disk.h"
 
-struct disk *disk;
+struct disk disk;
 
 int disk_read_sector(int lba, int total_sectors, void *buf)
 {
@@ -34,7 +34,7 @@ int disk_read_sector(int lba, int total_sectors, void *buf)
 
 int read_from_disk(struct disk *d, int lba, int total_sectors, void *buf)
 {
-    if (d != disk)
+    if (d != &disk)
     {
         return -1;
     }
@@ -43,9 +43,9 @@ int read_from_disk(struct disk *d, int lba, int total_sectors, void *buf)
 
 void search_and_init()
 {
-    memset(disk, 0, sizeof(*disk));
-    disk->type = 0;
-    disk->size = SECTOR_SIZE;
+    memset(&disk, 0, sizeof(disk));
+    disk.type = 0;
+    disk.size = SECTOR_SIZE;
 }
 
 struct disk *get_disk(int index)
@@ -54,5 +54,5 @@ struct disk *get_disk(int index)
     {
         return 0;
     }
-    return disk;
+    return &disk;
 }
