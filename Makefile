@@ -24,7 +24,8 @@ FILES = \
   ./build/disk.o \
   ./build/path_parser.o \
   ./build/string.o \
-  ./build/streamer.o
+  ./build/streamer.o \
+  ./build/ext2.o
 
 # Include directories
 INCLUDES = -I ./src/include
@@ -102,6 +103,9 @@ build_protected: ./src/boot/boot_protected_mode.asm
 
 ./build/string.o: ./src/string/string.c
 	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/string/string.c -o ./build/string.o
+
+./build/ext2.o: ./src/fs/ext2.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/fs/ext2.c -o ./build/ext2.o
 
 clean:
 	rm -rf ./bin/*

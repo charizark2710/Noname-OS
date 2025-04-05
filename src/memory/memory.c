@@ -25,3 +25,13 @@ int memcmp(const void *s1, const void *s2, int count)
 
     return 0; // s1 and s2 are equal
 }
+
+void memcpy(void *dest, const void *src, size_t n)
+{
+    char *c1 = (char *)dest;
+    char *c2 = (char *)src;
+    for (int i = 0; i < n; i++)
+    {
+        c1[i] = c2[i];
+    }
+}

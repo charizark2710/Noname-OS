@@ -30,22 +30,30 @@ static struct path_root *get_or_create_root(const char *path)
     return root;
 }
 
+struct inode *get_or_create_directory(struct inode *self_inode)
+{
+    // TODO: implement check if this inode is in directory_table
+    // if it exist return the child_inode
+    // else create and return the child_inode
+
+    // create child_inode
+    struct inode *child_inode = kmalloc(sizeof(struct inode));
+    return child_inode;
+}
+
 // ex: [path][to][file]
-struct inode *create_inode(char **path, struct inode *inode)
+struct inode *get_or_create_inode(char **path, struct inode *inode)
 {
     // Check if next path exist
     if (*path != 0x0 || **path != '\0')
     {
-        struct inode *next_inode = kmalloc(sizeof(struct inode *));
-        inode->next = next_inode;
-        inode->block = kmalloc(sizeof(const char *));
-        inode->part = *path;
+        struct inode *next_inode = get_or_create_directory(inode);
+        inode->block = 0x0;
         // TODO: implement get block
-        create_inode(path + 1, next_inode);
+        get_or_create_inode(path + 1, next_inode);
     }
     else
     {
-        inode->next = 0x0;
         inode->block = 0x0;
     }
 
@@ -54,11 +62,13 @@ struct inode *create_inode(char **path, struct inode *inode)
 
 void free_inode(struct inode *inode)
 {
-    if (inode->next != 0x0)
-    {
-        free_inode(inode->next);
-    }
     kfree(inode);
+}
+
+int is_directory(char **name)
+{
+    // check if nama is exist in directory_table
+    return 1;
 }
 
 // ex: /path/to/file
@@ -79,6 +89,7 @@ struct path_root *path_parser(const char *path)
     {
         if (*p == '/')
         {
+            // check if (*path_ptr)[c_index++] is directory
             if (index > 0)
             {
                 path_ptr++;
@@ -96,7 +107,7 @@ struct path_root *path_parser(const char *path)
 
     struct inode *first_inode = kmalloc(sizeof(struct inode));
 
-    struct inode *inodes = create_inode(path_org_addr, first_inode);
+    struct inode *inodes = get_or_create_inode(path_org_addr, first_inode);
     struct path_root *result = get_or_create_root(path);
     result->inodes = inodes;
 
@@ -107,5 +118,5 @@ struct path_root *path_parser(const char *path)
     // }
     kfree(path_org_addr);
 
-    return result;
+    return 0x0;
 }

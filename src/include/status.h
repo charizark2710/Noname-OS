@@ -13,4 +13,6 @@
 #define PATH_MAX_EXCEEDED -15
 #define PATH_INVALID -16
 
+#define BLOCK_EXCEED -17
+
 #endif

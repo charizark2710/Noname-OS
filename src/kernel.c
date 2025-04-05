@@ -1,6 +1,6 @@
 #include "include/kernel.h"
 #include "include/disk.h"
-#include "include/streamer.h"
+#include "include/ext2.h"
 
 uint16_t col;
 uint16_t row;
@@ -94,24 +94,37 @@ void kernel_main()
 
   enable_paging();
 
-  char *str = (char *)0x3000;
-  memory_map(get_directory(chunk), str, (size_t)ptr | PAGE_PRESENT | PAGE_WRITABLE);
-  str[0] = 'T';
-  str[1] = 'e';
-  str[2] = 's';
-  str[3] = 't';
-  str[4] = '\n';
+  // char *str = (char *)0x3000;
+  // memory_map(get_directory(chunk), str, (size_t)ptr | PAGE_PRESENT | PAGE_WRITABLE);
+  // str[0] = 'T';
+  // str[1] = 'e';
+  // str[2] = 's';
+  // str[3] = 't';
+  // str[4] = '\n';
 
-  print(str);
+  // print(str);
 
-  print(ptr);
+  // print(ptr);
 
   // char buf[512];
 
   // search_and_init();
   // read_from_disk(get_disk(0), 0, 1, buf);
 
-  struct path_root * p = path_parser("/home/root/os.bin");
+  struct path_root *p = path_parser("/home/root/os.bin");
+
+  init_ext2();
+
+  struct directory *home_dir = create_dir("home", 0, NULL);
+
+  char data[4096];
+  for (int i = 0; i < 4096; i++)
+  {
+    data[i] = 'a';
+  }
+
+  struct inode *test_inode = create_inode("os.bin", data, 4096, 0, home_dir);
+
   enable_int();
 
   struct disk_streamer *streamer = new_streamer(0);

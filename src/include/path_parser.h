@@ -6,6 +6,7 @@
 #include "status.h"
 #include "memory.h"
 #include "kheap.h"
+#include "ext2.h"
 
 #define MAX_PATH 4096
 #define NAME_MAX 256
@@ -18,16 +19,6 @@ struct path_root
 {
     struct inode *inodes;
     const char *path;
-};
-
-// Ex: /home/root/os.bin
-// blocks = [home, root, os.bin]
-// next     [1,    1,    0]
-struct inode
-{
-    char *block;
-    char *part;
-    struct inode *next;
 };
 
 struct path_root *path_parser(const char *path);
