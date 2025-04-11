@@ -1,6 +1,8 @@
 #include "../include/ext2.h"
 
 struct directory root_directory;
+struct directory_table directory_table;
+
 void init_ext2()
 {
     struct inode *root_inode = kmalloc(sizeof(struct inode));
@@ -9,7 +11,11 @@ void init_ext2()
     root_inode->block = 0x0;
     root_directory.inode = root_inode;
     root_directory.total_entries = 0;
+
+    directory_table.total_entries = 0;
+    directory_table.directory_entries[directory_table.total_entries++] = &root_directory;
 }
+
 
 static uint32_t align_upper(uint32_t val)
 {
@@ -21,7 +27,7 @@ static uint32_t align_upper(uint32_t val)
     return ++blocks;
 }
 
-struct inode *create_inode(char* id, void *data, size_t size, int owner, struct directory *directory)
+struct inode *create_inode(char *id, void *data, size_t size, int owner, struct directory *directory)
 {
     if (directory == NULL)
     {
@@ -69,6 +75,7 @@ struct inode *create_inode(char* id, void *data, size_t size, int owner, struct 
         }
     }
 
+    inode->meta_data->id = id;
     directory->inode_entries[directory->total_entries++] = inode;
     return inode;
 }
@@ -86,6 +93,7 @@ struct directory *create_dir(char *id, int owner, struct directory *parent_direc
     child_directory->inode = inode;
     child_directory->total_entries = 0;
 
+    directory_table.directory_entries[directory_table.total_entries++] = child_directory;
     return child_directory;
 }
 
@@ -103,5 +111,19 @@ struct inode *get_inode(char *id, struct directory *directory)
             return directory->inode_entries[i];
         }
     }
+    return 0x0;
+}
+
+struct directory *get_file_directory(char *id)
+{
+    size_t a = (size_t)&directory_table;
+    for (int i = 0; i < directory_table.total_entries; i++)
+    {
+        if (memcmp(directory_table.directory_entries[i]->inode->meta_data->id, id, strlen(id)) == 0)
+        {
+            return directory_table.directory_entries[i];
+        }
+    }
+
     return 0x0;
 }

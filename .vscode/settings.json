@@ -34,6 +34,7 @@
         "typeinfo": "c",
         "streamer.h": "c",
         "ext2.h": "c",
-        "variant": "c"
+        "variant": "c",
+        "cstring": "c"
     }
 }

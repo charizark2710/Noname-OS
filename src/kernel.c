@@ -110,9 +110,6 @@ void kernel_main()
 
   // search_and_init();
   // read_from_disk(get_disk(0), 0, 1, buf);
-
-  struct path_root *p = path_parser("/home/root/os.bin");
-
   init_ext2();
 
   struct directory *home_dir = create_dir("home", 0, NULL);
@@ -125,6 +122,9 @@ void kernel_main()
 
   struct inode *test_inode = create_inode("os.bin", data, 4096, 0, home_dir);
 
+  struct path_root *p = path_parser("/home/os.bin", false);
+
+  char *res = read_file(p->inode);
   enable_int();
 
   struct disk_streamer *streamer = new_streamer(0);

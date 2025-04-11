@@ -41,10 +41,17 @@ struct directory
     struct inode *inode_entries[MAX_ENTRIES];
 };
 
+struct directory_table
+{
+    int total_entries;
+    struct directory *directory_entries[MAX_ENTRIES];
+};
+
 void init_ext2();
 static uint32_t align_upper(uint32_t val);
 struct inode *create_inode(char* id, void *data, size_t size, int owner, struct directory *directory);
 struct directory *create_dir(char *id, int owner, struct directory *parent_table);
 struct inode *get_inode(char *id, struct directory *directory);
+struct directory *get_file_directory(char *id);
 
 #endif

@@ -22,57 +22,13 @@ int validate_path(const char *path)
     return OK;
 }
 
-static struct path_root *get_or_create_root(const char *path)
-{
-    // TODO: implement create path root
-    struct path_root *root = kmalloc(sizeof(struct path_root));
-    root->path = path;
-    return root;
-}
-
-struct inode *get_or_create_directory(struct inode *self_inode)
-{
-    // TODO: implement check if this inode is in directory_table
-    // if it exist return the child_inode
-    // else create and return the child_inode
-
-    // create child_inode
-    struct inode *child_inode = kmalloc(sizeof(struct inode));
-    return child_inode;
-}
-
-// ex: [path][to][file]
-struct inode *get_or_create_inode(char **path, struct inode *inode)
-{
-    // Check if next path exist
-    if (*path != 0x0 || **path != '\0')
-    {
-        struct inode *next_inode = get_or_create_directory(inode);
-        inode->block = 0x0;
-        // TODO: implement get block
-        get_or_create_inode(path + 1, next_inode);
-    }
-    else
-    {
-        inode->block = 0x0;
-    }
-
-    return inode;
-}
-
 void free_inode(struct inode *inode)
 {
     kfree(inode);
 }
 
-int is_directory(char **name)
-{
-    // check if nama is exist in directory_table
-    return 1;
-}
-
 // ex: /path/to/file
-struct path_root *path_parser(const char *path)
+struct path_root *path_parser(const char *path, bool need_create)
 {
     int status = validate_path(path);
     if (status != OK)
@@ -85,6 +41,8 @@ struct path_root *path_parser(const char *path)
     // *path_ptr = path_part;
     int index = 0;
     int c_index = 0;
+    size_t root_directory = (size_t)get_file_directory("root");
+    // ex: [path][to][file]
     for (const char *p = path; p != 0x0 && *p != '\0'; p++)
     {
         if (*p == '/')
@@ -92,6 +50,17 @@ struct path_root *path_parser(const char *path)
             // check if (*path_ptr)[c_index++] is directory
             if (index > 0)
             {
+                struct directory *directory = get_file_directory(*path_ptr);
+                if (directory == 0x0)
+                {
+                    if (!need_create)
+                    {
+                        status = PATH_INVALID;
+                        break;
+                    }
+                    directory = create_dir(*path_ptr, 0, (struct directory *)root_directory);
+                }
+                root_directory = (size_t)directory;
                 path_ptr++;
             }
             *path_ptr = kmalloc(sizeof(char) * NAME_MAX);
@@ -105,18 +74,43 @@ struct path_root *path_parser(const char *path)
     // Mark as end
     path_ptr[index][0] = '\0';
 
-    struct inode *first_inode = kmalloc(sizeof(struct inode));
+    if (status == OK)
+    {
+        struct inode *first_inode = kmalloc(sizeof(struct inode));
 
-    struct inode *inodes = get_or_create_inode(path_org_addr, first_inode);
-    struct path_root *result = get_or_create_root(path);
-    result->inodes = inodes;
+        struct path_root *result = kmalloc(sizeof(struct path_root));
+        result->full_path = path;
+        result->parent_path = path_org_addr[index - 2];
+        result->directory = (struct directory *)root_directory;
+        result->inode = get_inode(*path_ptr, result->directory);
+        kfree(path_org_addr);
+        return result;
+    }
 
-    // free everything
-    // for (int i = 0; i < index; i++)
-    // {
-    //     kfree(path_org_addr[i]);
-    // }
     kfree(path_org_addr);
 
     return 0x0;
+}
+
+void *read_block(char *start, char *end, struct block *block)
+{
+    struct block *current = block;
+    char *result = "";
+    size_t start_index = (size_t)result;
+    do
+    {
+        size_t size = current->end - current->start + 1;
+        memcpy((void *)start_index, current->start, size);
+        start_index += size;
+        current = current->next;
+    } while (current != 0x0);
+    return result;
+}
+
+void *read_file(struct inode *inode)
+{
+    char *start = inode->block->start;
+    char *end = inode->block->end;
+
+    return read_block(start, end, inode->block);
 }
