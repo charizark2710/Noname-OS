@@ -32,6 +32,17 @@ _start:
     out 0x21, al
     ; End remap master PIC
 
+
+    ; Remap slave PIC
+    mov al, 00010001b
+    out 0xA0, al ; Tell slave PIC
+
+    mov al, 0x28 ; interrupt 0x28 is where slave IRC start
+    out 0x28, al ; Set slave PIC offset
+
+    mov al, 00000001b
+    out 0xA1, al
+
     call kernel_main
 
     jmp $

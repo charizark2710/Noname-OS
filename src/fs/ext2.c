@@ -53,6 +53,7 @@ struct inode *create_inode(char *id, void *data, size_t size, int owner, struct 
             inode->block = kmalloc(sizeof(struct block));
             inode->block->start = (void *)c_block_data;
             inode->block->end = (void *)c_block_data + BLOCK_SIZE - 1;
+            inode->block->index = block_idx;
             c_block_addr = (size_t)inode->block;
         }
         else
@@ -62,6 +63,7 @@ struct inode *create_inode(char *id, void *data, size_t size, int owner, struct 
             current_block->next = next_block;
             next_block->start = (void *)c_block_data;
             next_block->end = (void *)c_block_data + BLOCK_SIZE;
+            inode->block->index = block_idx;
             c_block_addr = (size_t)next_block;
         }
         if (block_idx == needed_blocks - 1)
@@ -116,7 +118,6 @@ struct inode *get_inode(char *id, struct directory *directory)
 
 struct directory *get_file_directory(char *id)
 {
-    size_t a = (size_t)&directory_table;
     for (int i = 0; i < directory_table.total_entries; i++)
     {
         if (memcmp(directory_table.directory_entries[i]->inode->meta_data->id, id, strlen(id)) == 0)

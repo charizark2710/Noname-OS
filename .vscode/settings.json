@@ -35,6 +35,10 @@
         "streamer.h": "c",
         "ext2.h": "c",
         "variant": "c",
-        "cstring": "c"
+        "cstring": "c",
+        "pci.h": "c",
+        "RTL8139.h": "c",
+        "cstdint": "c",
+        "terminal.h": "c"
     }
 }

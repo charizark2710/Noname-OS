@@ -92,7 +92,7 @@ struct path_root *path_parser(const char *path, bool need_create)
     return 0x0;
 }
 
-void *read_block(char *start, char *end, struct block *block)
+void *read_block(struct block *block)
 {
     struct block *current = block;
     char *result = "";
@@ -109,8 +109,5 @@ void *read_block(char *start, char *end, struct block *block)
 
 void *read_file(struct inode *inode)
 {
-    char *start = inode->block->start;
-    char *end = inode->block->end;
-
-    return read_block(start, end, inode->block);
+    return read_block(inode->block);
 }

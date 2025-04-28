@@ -9,7 +9,7 @@ _start:
     jmp short start
     nop
 
-times 33 db 0 ; set 33 byte to 0 (33 is the sum of all parameter block in FAT) so that this can start on any 16 bits device
+; times 33 db 0 ; set 33 byte to 0 (33 is the sum of all parameter block in FAT) so that this can start on any 16 bits device
 
 start:
     jmp 0:post_start ; jump code segment to 0x7c0 address

@@ -1,20 +1,38 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Launch QEMU",
-            "type": "shell",
-            "linux": {
-                "command": "qemu-system-i386 -hda bin/os.bin -S -gdb tcp::1234 -daemonize"
-            },
-            "dependsOn": ["build"]
-        },
-        {
-            "label": "build",
-            "type": "shell",
-            "linux": {
-                "command": "./build.sh"
-            }
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Launch QEMU",
+      "type": "shell",
+      "linux": {
+        "command": "qemu-system-i386",
+        "args": [
+          "-hda",
+          "bin/os.bin",
+          "-S",
+          "-gdb",
+          "tcp::1234",
+          "-daemonize",
+          "-drive",
+          "file=disk_0.img,format=raw,index=0,media=disk,if=none,id=disk",
+          "-device",
+          "ahci,id=ahci",
+          "-device",
+          "ide-hd,drive=disk,bus=ahci.0",
+          "-netdev",
+          "tap,id=net0,ifname=tap0,script=no,downscript=no",
+          "-device",
+          "rtl8139,netdev=net0,id=nic0"
+        ]
+      },
+      "dependsOn": ["build"]
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "linux": {
+        "command": "./build.sh"
+      }
+    }
+  ]
 }

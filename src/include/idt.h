@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+#define PIC_MASTER_START 0x20
+#define PIC_SLAVE_START PIC_MASTER_START + 8
+
 // Offset: A 32-bit value, split in two parts. It represents the address of the entry point of the Interrupt Service Routine.
 // Selector: A Segment Selector with multiple fields which must point to a valid code segment in your GDT.
 // Gate Type: A 4-bit value which defines the type of gate this Interrupt Descriptor represents. There are five valid type values:
@@ -30,6 +33,7 @@ struct idtr_desc
 
 void idt_init();
 void int21_handler();
+void idt_set(int interrupt_no, void *address);
 
 extern void idt_load(struct idtr_desc *ptr);
 extern void int21h();

@@ -23,6 +23,7 @@ struct meta_data
 
 struct block
 {
+    int index;
     char *start;
     char *end;
     struct block *next;

@@ -1,6 +1,6 @@
 #include "../include/idt.h"
 #include "../config.h"
-#include "../include/kernel.h"
+#include "../include/terminal.h"
 #include "../include/memory.h"
 #include "../include/io.h"
 

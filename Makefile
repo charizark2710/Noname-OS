@@ -13,6 +13,7 @@
 FILES = \
   ./build/kernel.asm.o \
   ./build/kernel.o \
+  ./build/terminal.o \
   ./build/idt.asm.o \
   ./build/idt.o \
   ./build/memory.o \
@@ -25,7 +26,9 @@ FILES = \
   ./build/path_parser.o \
   ./build/string.o \
   ./build/streamer.o \
-  ./build/ext2.o
+  ./build/ext2.o \
+  ./build/pci.o \
+  ./build/RTL8139.o \
 
 # Include directories
 INCLUDES = -I ./src/include
@@ -50,6 +53,7 @@ FLAGS = \
 
 # Build targets
 all_protected: build_protected ./bin/kernel.bin
+	dd if=/dev/zero bs=1M count=10
 	dd if=./bin/boot_protected_mode.bin >> ./bin/os.bin
 	dd if=./bin/kernel.bin >> ./bin/os.bin
 	dd if=/dev/zero bs=512 count=100 >> ./bin/os.bin
@@ -68,6 +72,9 @@ build_protected: ./src/boot/boot_protected_mode.asm
 ./build/kernel.o: ./src/kernel.c
 	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/kernel.c -o ./build/kernel.o
 
+./build/terminal.o: ./src/terminal/terminal.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/terminal/terminal.c -o ./build/terminal.o
+
 ./build/idt.asm.o: ./src/idt/idt.asm
 	nasm -f elf -g ./src/idt/idt.asm -o ./build/idt.asm.o
 
@@ -85,6 +92,12 @@ build_protected: ./src/boot/boot_protected_mode.asm
 
 ./build/io.asm.o: ./src/io/io.asm
 	nasm -f elf -g ./src/io/io.asm -o ./build/io.asm.o
+
+./build/pci.o: ./src/io/pci.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/io/pci.c -o ./build/pci.o
+
+./build/RTL8139.o: ./src/networking/RTL8139.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/networking/RTL8139.c -o ./build/RTL8139.o
 
 ./build/page.asm.o: ./src/memory/page/page.asm
 	nasm -f elf -g ./src/memory/page/page.asm -o ./build/page.asm.o

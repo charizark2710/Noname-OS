@@ -1,10 +1,12 @@
 section .asm
 
 extern int21_handler
+extern int_RTL8139_handler
 extern no_int_handler
 
 global idt_load
 global int21h
+global int_RTL8139
 global no_int
 global enable_int
 global disable_int
@@ -30,6 +32,14 @@ int21h:
     cli
     pushad
     call int21_handler
+    popad
+    sti
+    iret
+
+int_RTL8139:
+    cli
+    pushad
+    call int_RTL8139_handler
     popad
     sti
     iret

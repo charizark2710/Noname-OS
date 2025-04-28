@@ -13,13 +13,9 @@
 #include "path_parser.h"
 #include "streamer.h"
 #include "ext2.h"
+#include "terminal.h"
+#include "pci.h"
 
 void kernel_main();
-void print_char(int x, int y, const char *str, char color);
-void write(char c, uint16_t color);
-void terminal_init();
-void terminal_put_char(int x, int y, char c, char color);
-uint16_t terminal_make_char(char c, char color);
-void print(char *c);
 
 #endif
