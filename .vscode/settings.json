@@ -39,6 +39,7 @@
         "pci.h": "c",
         "RTL8139.h": "c",
         "cstdint": "c",
-        "terminal.h": "c"
+        "terminal.h": "c",
+        "net.h": "c"
     }
 }

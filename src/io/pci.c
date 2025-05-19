@@ -58,6 +58,7 @@ uint16_t pciCheckVendor(uint8_t bus, uint8_t slot)
     }
     return vendor;
 }
+int count_network_devices = 0;
 
 // currently only supports bus 0
 void init_pci()
@@ -93,9 +94,15 @@ void init_pci()
             devices[device_count].interrupt_line = pciConfigReadWord(bus, device, function, 0x3C);
             if (devices[device_count].class_code >> 16 >> 8 == ETHERNET_CONTROLLER)
             {
+                count_network_devices++;
                 setup_RTL8139(devices[device_count]);
             }
             device_count++;
         }
     }
+}
+
+int countNetworkDevices()
+{
+    return count_network_devices;
 }

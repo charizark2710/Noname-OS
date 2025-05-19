@@ -12,6 +12,6 @@ void write(char c, uint16_t color);
 void terminal_init();
 // void terminal_put_char(int x, int y, char c, char color);
 // uint16_t terminal_make_char(char c, char color);
-void print(char *c);
+void print(void *c);
 
 #endif

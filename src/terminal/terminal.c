@@ -69,10 +69,10 @@ void write(char c, uint16_t color)
   }
 }
 
-void print(char *c)
+void print(void *c)
 {
   for (size_t i = 0; i < strlen(c); i++)
   {
-    write(c[i], 15);
+    write(((char *)c)[i], 15);
   }
 }

@@ -29,6 +29,7 @@ FILES = \
   ./build/ext2.o \
   ./build/pci.o \
   ./build/RTL8139.o \
+  ./build/net.o
 
 # Include directories
 INCLUDES = -I ./src/include
@@ -98,6 +99,9 @@ build_protected: ./src/boot/boot_protected_mode.asm
 
 ./build/RTL8139.o: ./src/networking/RTL8139.c
 	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/networking/RTL8139.c -o ./build/RTL8139.o
+
+./build/net.o: ./src/networking/net.c
+	i686-elf-gcc $(INCLUDES) $(FLAGS) -std=gnu99 -c ./src/networking/net.c -o ./build/net.o
 
 ./build/page.asm.o: ./src/memory/page/page.asm
 	nasm -f elf -g ./src/memory/page/page.asm -o ./build/page.asm.o

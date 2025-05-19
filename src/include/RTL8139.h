@@ -1,22 +1,21 @@
 #ifndef RTL8139_H
 #define RTL8139_H
+#include <stdint.h>
 #include "io.h"
 #include "kheap.h"
 #include "pci.h"
 #include "idt.h"
 #include "terminal.h"
-#include <stdint.h>
+#include "net.h"
 
-char *setup_RTL8139(struct pci_device);
-
-#define OWN (1<<31)
-#define EOR (1<<30)
-#define FS  (1<<29)
-#define LS  (1<<28)
-#define LGSEN (1<<27)
-#define IPCS (1<<18)
-#define UDPCS (1<<17)
-#define TCPCS (1<<16)
+#define OWN (1 << 31)
+#define EOR (1 << 30)
+#define FS (1 << 29)
+#define LS (1 << 28)
+#define LGSEN (1 << 27)
+#define IPCS (1 << 18)
+#define UDPCS (1 << 17)
+#define TCPCS (1 << 16)
 
 struct Descriptor
 {
@@ -39,7 +38,10 @@ struct Package_Send_Descriptor
     uint32_t len;
 };
 
-void rtl_send_package(void *base_address, struct Package_Send_Descriptor data);
+// void rtl_send_package(void *base_address, struct Package_Send_Descriptor data);
 struct Package_Received_Descriptor rtl_recievePackage();
+char *setup_RTL8139(struct pci_device);
+struct ethernet_package *build_package_rtl8139(uint8_t dst_mac_addr[6], void *data, int len, uint16_t type);
 
+uint8_t *get_mac_addr();
 #endif
