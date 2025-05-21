@@ -69,7 +69,7 @@ void *kmalloc(size_t size)
     uint32_t aligned_size = align_upper(size);
     if (aligned_size > HEAP_SIZE_TOTAL)
     {
-        return 0;
+        return NULL;
     }
     uint32_t total_needed_blocks = aligned_size / HEAP_BLOCK_SIZE;
     int total_table_entries = kheap.table.total;
@@ -99,7 +99,7 @@ void *kmalloc(size_t size)
     {
         print("Failed to create heap\n");
     }
-    return 0;
+    return NULL;
 }
 
 void kfree(void *ptr)

@@ -1,7 +1,8 @@
 #include "../include/net.h"
-#include "../include/terminal.h"
 
-func_ptr_t *sendFuncList;
+static func_ptr_t *sendFuncList;
+static func_ptr_b *buildFuncList;
+static int func_index = 0;
 
 uint16_t flip_short(uint16_t short_int)
 {
@@ -36,29 +37,35 @@ uint16_t htons(uint16_t hostshort)
     return flip_short(hostshort);
 }
 
-int func_index = 0;
-void register_func(func_ptr_t sendFunc)
+void register_func(func_ptr_b buildFunc, func_ptr_t sendFunc)
 {
     if (sendFuncList == NULL)
     {
         sendFuncList = kmalloc(countNetworkDevices() * sizeof(func_ptr_t));
+    }
+    if (buildFuncList == NULL)
+    {
+        buildFuncList = kmalloc(countNetworkDevices() * sizeof(func_ptr_b));
     }
     if (func_index >= countNetworkDevices())
     {
         return;
     }
     sendFuncList[func_index] = sendFunc;
+    buildFuncList[func_index] = buildFunc;
     func_index += 1;
     return;
 }
 
-bool send_package(void *data, int len)
+bool send_package(uint8_t *dst, void *data, int len, uint16_t type)
 {
     bool is_success = false;
     int index = 0;
     do
     {
-        is_success = sendFuncList[index++](data, len);
+        void *package = buildFuncList[index](dst, data, len, type);
+        is_success = sendFuncList[index++](package, len);
+        package = NULL;
     } while (!is_success && index < countNetworkDevices());
     return is_success;
 }

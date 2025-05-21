@@ -32,16 +32,17 @@ struct Package_Received_Descriptor
     unsigned long high_buf;
 };
 
-struct Package_Send_Descriptor
+struct ethernet_package
 {
-    void *addr;
-    uint32_t len;
-};
+    uint8_t dst_mac_addr[6];
+    uint8_t src_mac_addr[6];
+    uint16_t type;
+    uint8_t data[];
+} __attribute__((packed));
 
 // void rtl_send_package(void *base_address, struct Package_Send_Descriptor data);
-struct Package_Received_Descriptor rtl_recievePackage();
-char *setup_RTL8139(struct pci_device);
-struct ethernet_package *build_package_rtl8139(uint8_t dst_mac_addr[6], void *data, int len, uint16_t type);
+struct Package_Received_Descriptor rtl_receive_package();
+void setup_RTL8139(struct pci_device);
 
 uint8_t *get_mac_addr();
 #endif

@@ -1,6 +1,8 @@
 #include "../include/pci.h"
 #include "../include/RTL8139.h"
 
+static int count_network_devices = 0;
+
 uint16_t pciConfigReadWord(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset)
 {
     uint32_t address;
@@ -58,7 +60,6 @@ uint16_t pciCheckVendor(uint8_t bus, uint8_t slot)
     }
     return vendor;
 }
-int count_network_devices = 0;
 
 // currently only supports bus 0
 void init_pci()

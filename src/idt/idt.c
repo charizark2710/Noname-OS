@@ -15,7 +15,7 @@ void idt_zero()
 void idt_set(int interrupt_no, void *address)
 {
     struct idt_desc *desc = &idt_descriptors[interrupt_no];
-    desc->offset_high = (uint32_t)address & 0x0000ffff;
+    desc->offset_high = (uint32_t)address & 0xFFFF;
     desc->selector = KERNEL_CODE_SELECTOR;
     desc->reverse = 0x00;
     desc->gateType = 0xEE;

@@ -15,7 +15,6 @@
 #include "ext2.h"
 #include "terminal.h"
 #include "pci.h"
-#include "RTL8139.h"
 #include "net.h"
 
 void kernel_main();

@@ -70,8 +70,6 @@ void kernel_main()
   read_streamer(streamer, &ch, 1);
 
   uint8_t dest_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-  struct ethernet_package *demo = build_package_rtl8139(dest_mac, "Hi", 2, 0x0806);
   uint16_t ethertype = 0x0806;
-  send_package((void *)demo, sizeof(struct ethernet_package) + 2);
-  kfree(demo);
+  send_package(dest_mac, (void *)"Hi", 2, ethertype);
 }

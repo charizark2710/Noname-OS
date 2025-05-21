@@ -26,6 +26,7 @@ struct pci_device
 };
 
 void init_pci();
+void set_mechanism(uint16_t value);
 void pciConfigWriteDWord(struct pci_device device, uint8_t offset, uint32_t value);
 uint16_t pciConfigReadWord(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
 uint32_t pciConfigReadDWord(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
